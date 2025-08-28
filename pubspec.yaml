@@ -13,7 +13,6 @@ workspace:
   - packages/core
   - packages/updater
 
-
 melos:
   sdkPath: .fvm/flutter_sdk
 
@@ -28,7 +27,7 @@ melos:
         flutter: ">=3.35.1 <4.0.0"
       hooks:
         # 初始化时生成代码
-        post: dart run build_runner build --delete-conflicting-outputs
+        post: cd apps/web && pnpm i && cd ../.. && melos run generate
 
     clean:
       hooks:
