@@ -12,4 +12,3 @@ melos_*.iml
 *.g.dart
 *.mapper.dart
 global.config.dart
-objectbox-model.json

@@ -11,6 +11,8 @@ import 'middlewares/auth_middleware.dart';
 import 'middlewares/errors_handler.dart';
 import 'package:core/core.dart';
 
+import 'utils/static_res_util.dart';
+
 class Server {
   static const _defaultPort = 8080;
   static const _defaultHost = '0.0.0.0';
@@ -29,6 +31,7 @@ class Server {
     String host = _defaultHost,
     int port = _defaultPort,
     String? webPath,
+    String? staticPath,
   }) async {
     if (server != null) {
       AppLogger().info('HTTP服务器已经在运行中');
@@ -38,12 +41,19 @@ class Server {
     final app = Router().plus;
 
     var apiHandler = _createApiHandler();
-    // var staticHandler = _createStaticHandler(webPath);
-
-    var staticHandler = createAssetStaticHandler(urlPrefix: '/');
-
     app.mount('/api', apiHandler);
-    if (staticHandler != null) {
+
+    if (staticPath != null) {
+      var path = await StaticResUtil.init(staticPath);
+      var staticHandler = _createStaticHandler(path);
+      app.mount('/static', staticHandler);
+    }
+
+    if (webPath != null) {
+      var staticHandler = createAssetStaticHandler(
+        assetPath: webPath,
+        urlPrefix: '/',
+      );
       app.mount('/', staticHandler);
     }
 
@@ -87,16 +97,13 @@ class Server {
     return handler;
   }
 
-  static Handler? _createStaticHandler(String? webPath) {
-    Handler? handler;
-    // 静态文件服务
-    if (webPath != null) {
-      var staticHandler = createStaticHandler(
-        webPath,
-        defaultDocument: 'index.html',
-      );
-      handler = const Pipeline().addHandler(staticHandler);
-    }
+  static Handler _createStaticHandler(String webPath) {
+    var staticHandler = createStaticHandler(
+      webPath,
+      listDirectories: true,
+      useHeaderBytesForContentType: true,
+    );
+    var handler = const Pipeline().addHandler(staticHandler);
     return handler;
   }
 }

@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:mime/mime.dart';
 import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:shelf_plus/shelf_plus.dart';
+import 'package:uuid/uuid.dart';
 
 import '../exceptions/business_exception.dart';
 import 'common_util.dart';
@@ -57,6 +58,21 @@ class MultipartUtil {
             ),
           );
         }
+
+        if (_videoMimeTypes.firstWhereOrNull((e) => e == contentType) != null) {
+          final field = _extractFieldName(contentDisposition);
+          final fileName = _extractFileName(contentDisposition);
+          final value = await part.readBytes();
+          files.add(
+            FormDataFile(
+              fileName: fileName,
+              bytes: value,
+              contentType: contentType,
+              size: value.length,
+              field: field,
+            ),
+          );
+        }
       }
 
       for (var e in files) {
@@ -88,39 +104,39 @@ class MultipartUtil {
     return match?.group(1) ?? 'field';
   }
 
-  static String _getFileExtension(String fileName) {
-    return fileName.split('.').last.toLowerCase();
-  }
+  // static String _getFileExtension(String fileName) {
+  //   return fileName.split('.').last.toLowerCase();
+  // }
 
   static String? getMimeType(String fileName) {
     return lookupMimeType(fileName);
   }
 
-  static Future<File> saveToDisk(FormDataFile file, String directory) async {
+  static Future<String> saveToDisk(FormDataFile file, String directory) async {
     final dir = Directory(directory);
-    if (!dir.existsSync()) {
-      dir.createSync(recursive: true);
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
     }
 
-    final fileName =
-        '${DateTime.now().millisecondsSinceEpoch}_${file.fileName}';
+    var uuid = Uuid();
+    final fileName = '${uuid.v4()}.${file.extension}';
     final filePath = '${dir.path}/$fileName';
     final savedFile = File(filePath);
     await savedFile.writeAsBytes(file.bytes);
 
-    return savedFile;
+    return fileName;
   }
 
-  static Future<List<File>> saveMultipleToDisk(
+  static Future<List<String>> saveMultipleToDisk(
     List<FormDataFile> files,
     String directory,
   ) async {
-    final savedFiles = <File>[];
+    final fileNames = <String>[];
     for (final file in files) {
       final savedFile = await saveToDisk(file, directory);
-      savedFiles.add(savedFile);
+      fileNames.add(savedFile);
     }
-    return savedFiles;
+    return fileNames;
   }
 }
 

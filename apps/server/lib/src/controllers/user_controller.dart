@@ -1,9 +1,9 @@
 import 'package:server/src/exceptions/business_exception.dart';
 import 'package:server/src/pojo/dto/login_form_dto.dart';
 import 'package:server/src/result/result.dart';
-import 'package:server/src/utils/context_util.dart';
 import 'package:server/src/utils/jwt_util.dart';
 import 'package:server/src/utils/multipart_util.dart';
+import 'package:server/src/utils/static_res_util.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
 import 'rest_controller.dart';
@@ -29,8 +29,16 @@ class UserController implements RestController {
   Future<Response> upload(Request request) async {
     var result = await MultipartUtil.loadMultipart(request);
     print(result);
-    var username = ContextUtil.getJwtPayloadString(request, 'username');
-    return Result.ok('$username');
+    // var username = ContextUtil.getJwtPayloadString(request, 'username');
+
+    var files = result['files'] as List<FormDataFile>;
+
+    var list = await MultipartUtil.saveMultipleToDisk(
+      files,
+      StaticResUtil.staticResPath,
+    );
+
+    return Result.ok(list);
   }
 
   @override

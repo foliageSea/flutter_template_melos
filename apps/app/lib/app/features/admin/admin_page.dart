@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:server/server.dart' as server;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,7 +32,9 @@ class _AdminPageState extends State<AdminPage> {
 
   Future<void> _startServer() async {
     try {
-      await server.Server.start(webPath: 'assets/web');
+      var dir = await getApplicationSupportDirectory();
+
+      await server.Server.start(webPath: 'assets/web', staticPath: dir.path);
 
       _updateServerStatus();
     } catch (e) {
