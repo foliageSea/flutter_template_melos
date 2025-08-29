@@ -1,5 +1,13 @@
 # flutter_template_melos
 
+## 项目初始化
+```bash
+git clone https://github.com/foliageSea/flutter_template_melos.git flutter_template_melos
+cd flutter_template_melos
+fvm use
+melos bs
+```
+
 
 ## 文档
 ### mono-repos
@@ -32,3 +40,11 @@
 
 ### CI/CD
 - fastforge: https://fastforge.dev/
+
+### Web
+- shadcn-vue: https://www.shadcn-vue.com/
+- vue-bits: https://vue-bits.dev/
+- reka-ui: https://reka-ui.com/
+- inspira-ui: https://inspira-ui.com/docs/zh-cn
+- shadcn-vue-admin: https://github.com/Whbbit1999/shadcn-vue-admin
+- shadcn-ui-mcp-server: https://github.com/Jpisnice/shadcn-ui-mcp-server
