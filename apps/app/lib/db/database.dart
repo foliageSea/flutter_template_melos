@@ -1,3 +1,5 @@
+import 'package:app/app/common/global.dart';
+import 'package:app/db/services/services.dart';
 import 'package:core/core.dart';
 import 'package:app/objectbox.g.dart';
 import 'package:get_it/get_it.dart';
@@ -22,6 +24,8 @@ class AppDatabase with AppLogMixin {
     path = p.join(dir.path, "db");
     logger.log("数据库 $path");
     store = await openStore(directory: path);
+
+    await Global.getIt<UserService>().initDefaultUser();
   }
 
   String getPath() {

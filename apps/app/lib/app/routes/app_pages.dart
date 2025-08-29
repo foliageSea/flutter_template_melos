@@ -6,7 +6,7 @@ import '../middlewares/middlewares.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = AppRoutes.admin;
+  static const initial = AppRoutes.home;
 
   static Transition transition = Transition.cupertino;
 

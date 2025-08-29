@@ -6,6 +6,8 @@ import 'package:app/db/database.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:server/server.dart' as server;
 import 'global.config.dart';
 
 // 文档: https://pub.dev/packages/injectable
@@ -51,6 +53,7 @@ class Global {
     initAppVersion();
     registerServices();
     await configureDependencies();
+    await startServer();
     logger.info('应用初始化完成');
   }
 
@@ -70,5 +73,14 @@ class Global {
 
   static initAppVersion() {
     appVersion = PackageInfoUtil().getVersion();
+  }
+
+  static Future startServer() async {
+    try {
+      var dir = await getApplicationSupportDirectory();
+      await server.Server.start(webPath: 'assets/web', staticPath: dir.path);
+    } catch (e, st) {
+      AppLogger().handle(e, st);
+    }
   }
 }

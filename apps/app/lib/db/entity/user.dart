@@ -4,5 +4,12 @@ import 'package:objectbox/objectbox.dart';
 class User {
   @Id()
   int id = 0;
-  String? name;
+  @Unique()
+  late String username;
+  late String password;
+  late String name;
+  String? avatar;
+  bool isAdmin = false;
+  late DateTime createTime;
+  late DateTime updateTime;
 }
