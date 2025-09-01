@@ -15,7 +15,6 @@ import 'utils/static_res_util.dart';
 
 class Server {
   static const _defaultPort = 8080;
-  static const _defaultHost = '0.0.0.0';
 
   Server._();
 
@@ -28,7 +27,6 @@ class Server {
   ];
 
   static Future<void> start({
-    String host = _defaultHost,
     int port = _defaultPort,
     String? webPath,
     String? staticPath,
@@ -57,10 +55,10 @@ class Server {
       app.mount('/', staticHandler);
     }
 
-    server = await io.serve(app.call, host, port);
+    server = await io.serve(app.call, InternetAddress.anyIPv4, port);
     // ignore: avoid_print
     AppLogger().info(
-      'HTTP服务器启动在 http://${server!.address.host}:${server!.port}',
+      'HTTP服务器启动在 http://${InternetAddress.anyIPv4.host}:${server!.port}',
     );
   }
 
@@ -74,7 +72,7 @@ class Server {
   }
 
   static String? get serverUrl {
-    return 'http://$_defaultHost:$_defaultPort';
+    return 'http://${InternetAddress.anyIPv4.host}:$_defaultPort';
   }
 
   static Handler _createApiHandler() {
