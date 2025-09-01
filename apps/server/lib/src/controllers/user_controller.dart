@@ -10,6 +10,7 @@ import 'package:server/src/utils/static_res_util.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
 import '../pojo/vo/user_info_vo.dart';
+import '../utils/validator_util.dart';
 import 'rest_controller.dart';
 
 part 'user_controller.g.dart';
@@ -20,9 +21,13 @@ class UserController implements RestController {
     final json = await request.body.asJson;
 
     var formDto = LoginFormDtoMapper.fromMap(json);
-    if (formDto.username.isEmpty || formDto.password.isEmpty) {
-      throw BusinessException.badRequest('请输入用户名或密码');
-    }
+
+    ValidatorUtil.validateAll([
+      () => ValidatorUtil.required(formDto.username, '用户名'),
+      () => ValidatorUtil.required(formDto.password, '密码'),
+      () => ValidatorUtil.length(formDto.username, '用户名', min: 3, max: 20),
+      () => ValidatorUtil.length(formDto.password, '密码', min: 3, max: 20),
+    ]);
 
     UserService userService = Global.getIt();
     var user = await userService.login(formDto.username, formDto.password);
