@@ -1,62 +1,64 @@
 <script lang="ts" setup>
-import GitHubButton from './github-button.vue'
-import GoogleButton from './google-button.vue'
-import PrivacyPolicyButton from './privacy-policy-button.vue'
-import TermsOfServiceButton from './terms-of-service-button.vue'
-import ToForgotPasswordLink from './to-forgot-password-link.vue'
+import {ref} from 'vue'
+import {useUserApi} from '@/services/api/user.api.ts'
+import {useAuthStore} from '@/stores/auth.ts'
+import {toast} from 'vue-sonner'
+import {useRouter} from 'vue-router'
+
+const userApi = useUserApi();
+const authStore = useAuthStore();
+const router = useRouter()
+
+const form = ref({
+  username: 'admin',
+  password: 'admin',
+})
+
+async function login() {
+  let resp = await userApi.login(form.value);
+  console.log('登录成功')
+
+  let token = resp.data.token;
+
+  authStore.token = token;
+
+  await router.push('/')
+
+  toast.success('登录成功');
+
+  await authStore.getUserInfo()
+
+}
+
+
 </script>
 
 <template>
   <UiCard class="w-full max-w-sm">
     <UiCardHeader>
       <UiCardTitle class="text-2xl">
-        Login
+        登录
       </UiCardTitle>
-      <UiCardDescription>
-        Enter your email and password below to log into your account.
-        Not have an account?
-        <UiButton
-          variant="link" class="px-0 text-muted-foreground"
-          @click="$router.push('/auth/sign-up')"
-        >
-          Sign Up
-        </UiButton>
-      </UiCardDescription>
     </UiCardHeader>
     <UiCardContent class="grid gap-4">
       <div class="grid gap-2">
         <UiLabel for="email">
-          Email
+          用户名
         </UiLabel>
-        <UiInput id="email" type="email" placeholder="m@example.com" required />
+        <UiInput v-model:model-value="form.username" id="username" placeholder="请输入用户名" required/>
       </div>
       <div class="grid gap-2">
         <div class="flex items-center justify-between">
           <UiLabel for="password">
-            Password
+            密码
           </UiLabel>
-          <ToForgotPasswordLink />
         </div>
-        <UiInput id="password" type="password" required placeholder="*********" />
+        <UiInput v-model:model-value="form.password" id="password" type="password" required placeholder="请输入密码"/>
       </div>
 
-      <UiButton class="w-full">
-        Login
+      <UiButton class="w-full" @click="login">
+        登录
       </UiButton>
-
-      <UiSeparator label="Or continue with" />
-
-      <div class="flex flex-col items-center justify-between gap-4">
-        <GitHubButton />
-        <GoogleButton />
-      </div>
-
-      <UiCardDescription>
-        By clicking login, you agree to our
-        <TermsOfServiceButton />
-        and
-        <PrivacyPolicyButton />
-      </UiCardDescription>
     </UiCardContent>
   </UiCard>
 </template>

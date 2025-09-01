@@ -5,12 +5,14 @@ import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 const pinia = createPinia()
 
-export function setupPinia(app: App) {
-  const persistedState = createPersistedState({
-    storage: sessionStorage,
-  })
 
-  pinia.use(persistedState)
+const persistedState = createPersistedState({
+  storage: localStorage,
+})
+
+pinia.use(persistedState)
+
+export function setupPinia(app: App) {  
   app.use(pinia)
 }
 

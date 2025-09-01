@@ -1,31 +1,40 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import {storeToRefs} from 'pinia'
 
 import Loading from '@/components/loading.vue'
-import { Toaster } from '@/components/ui/sonner'
-import { THEMES, useThemeStore } from '@/stores/theme'
+import {Toaster} from '@/components/ui/sonner'
+import {THEMES, useThemeStore} from '@/stores/theme'
+import {useAuthStore} from '@/stores/auth.ts'
 
 const themeStore = useThemeStore()
-const { theme: t, radius } = storeToRefs(themeStore)
+const {theme: t, radius} = storeToRefs(themeStore)
 
 watchEffect(() => {
   document.documentElement.classList.remove(...THEMES.map(theme => `theme-${theme}`))
   document.documentElement.classList.add(`theme-${t.value}`)
   document.documentElement.style.setProperty('--radius', `${radius.value}rem`)
 })
+
+useAuthStore().getUserInfo();
+
+
 </script>
 
 <template>
-  <Toaster />
+  <Toaster/>
   <!-- <VueQueryDevtools /> -->
 
   <Suspense>
     <router-view v-slot="{ Component, route }">
-      <component :is="Component" :key="route" />
+      <component :is="Component" :key="route"/>
     </router-view>
 
     <template #fallback>
-      <Loading />
+      <Loading/>
     </template>
   </Suspense>
 </template>
+
+
+
+
