@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('user', () => {
         return token.value !== ''
     })
     const token = ref('')
-    const userInfo = ref<UserInfo>({})
+    const userInfo = ref<Partial<UserInfo>>({})
 
     function clearToken() {
         token.value = ''

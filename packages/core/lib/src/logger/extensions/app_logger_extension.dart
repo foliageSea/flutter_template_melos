@@ -7,12 +7,12 @@ import '../logger.dart';
 
 extension AppLoggerExtension on AppLogger {
   Future<dynamic> toTalkerScreen(BuildContext context) {
-    return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => TalkerScreen(
-        talker: talker,
-        isLogsExpanded: false,
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            TalkerScreen(talker: talker, isLogsExpanded: false),
       ),
-    ));
+    );
   }
 
   Interceptor getDioInterceptor() {

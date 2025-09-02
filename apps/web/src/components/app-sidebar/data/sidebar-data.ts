@@ -1,7 +1,7 @@
 import {
-    AudioWaveform,
-    Command,
-    GalleryVerticalEnd,
+    // AudioWaveform,
+    // Command,
+    // GalleryVerticalEnd,
     AppWindowIcon
 } from 'lucide-vue-next'
 

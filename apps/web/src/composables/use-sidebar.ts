@@ -2,18 +2,16 @@ import {
     BadgeHelp,
     BellDot,
     Boxes,
-    Bug,
     CreditCard,
     LayoutDashboard,
     ListTodo,
     Palette,
     PictureInPicture2,
-    Podcast,
     Settings,
-    SquareUserRound,
     User,
     Users,
     Wrench,
+    Bug
 } from 'lucide-vue-next'
 
 import type {NavGroup} from '@/components/app-sidebar/types'
@@ -50,6 +48,11 @@ export function useSidebar() {
                 //   url: '/ai-talk',
                 //   icon: Podcast,
                 // },
+                {
+                    title: '日志',
+                    url: '/log',
+                    icon: Bug,
+                },
             ],
         },
         // {

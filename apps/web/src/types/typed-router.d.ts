@@ -39,6 +39,7 @@ declare module 'vue-router/auto-routes' {
     '/errors/500': RouteRecordInfo<'/errors/500', '/errors/500', Record<never, never>, Record<never, never>>,
     '/errors/503': RouteRecordInfo<'/errors/503', '/errors/503', Record<never, never>, Record<never, never>>,
     '/help-center': RouteRecordInfo<'/help-center', '/help-center', Record<never, never>, Record<never, never>>,
+    '/log/': RouteRecordInfo<'/log/', '/log', Record<never, never>, Record<never, never>>,
     '/marketing/': RouteRecordInfo<'/marketing/', '/marketing', Record<never, never>, Record<never, never>>,
     '/marketing/hello': RouteRecordInfo<'/marketing/hello', '/marketing/hello', Record<never, never>, Record<never, never>>,
     '/settings/': RouteRecordInfo<'/settings/', '/settings', Record<never, never>, Record<never, never>>,
@@ -143,6 +144,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/help-center.vue': {
       routes: '/help-center'
+      views: never
+    }
+    'src/pages/log/index.vue': {
+      routes: '/log/'
       views: never
     }
     'src/pages/marketing/index.vue': {
