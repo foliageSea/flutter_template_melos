@@ -12,6 +12,7 @@ workspace:
   - apps/server
   - packages/core
   - packages/updater
+  - packages/restaurant_local_server
 
 melos:
   sdkPath: .fvm/flutter_sdk
