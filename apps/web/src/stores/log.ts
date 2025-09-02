@@ -1,9 +1,21 @@
 import {defineStore} from "pinia";
 import {useLogApi} from '@/services/api/log.api.ts'
 
+
+export interface Log {
+    message: string;
+    logLevel: string;
+    example: string;
+    error: string;
+    stackTrace: string;
+    title: string;
+    time: string;
+}
+
+
 export const useLogStore = defineStore('log', () => {
 
-    let logs = ref([])
+    let logs = ref<Log[]>([])
 
     let logApi = useLogApi();
 

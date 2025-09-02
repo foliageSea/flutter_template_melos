@@ -96,14 +96,14 @@ class Server {
       router.mount(instance.getController(), instance.getRouter().call);
     }
 
-    logger(String message, bool isError) {
-      AppLogger().info(message);
-    }
+    // logger(String message, bool isError) {
+    //   AppLogger().info(message);
+    // }
 
     // 配置中间件
     Handler handler = const Pipeline()
         .addMiddleware(corsHeaders())
-        .addMiddleware(logRequests(logger: logger))
+        .addMiddleware(logRequests())
         .addMiddleware(errorsHandler())
         .addMiddleware(AuthMiddleware.create())
         .addHandler(router.call);
@@ -132,21 +132,20 @@ class Server {
     );
     await webSocketServer!.start();
 
-    // AppLogger().talker.stream.listen((e) {
-    //   e.toString();
-    //   webSocketServer?.broadcastCustomMessage(
-    //     customType: 'logger',
-    //     customData: LogDataVo(
-    //       message: e.message,
-    //       logLevel: e.logLevel?.name,
-    //       exception: e.exception.toString(),
-    //       error: e.error.toString(),
-    //       stackTrace: e.stackTrace.toString(),
-    //       title: e.title,
-    //       time: e.time.toIso8601String(),
-    //     ).toMap(),
-    //   );
-    // });
+    AppLogger().talker.stream.listen((e) {
+      webSocketServer?.broadcastCustomMessage(
+        customType: 'logger',
+        customData: LogDataVo(
+          message: e.message,
+          logLevel: e.logLevel?.name,
+          exception: e.exception?.toString(),
+          error: e.error?.toString(),
+          stackTrace: e.stackTrace?.toString(),
+          title: e.title,
+          time: e.time.toIso8601String(),
+        ).toMap(),
+      );
+    });
   }
 
   static Future _handleWebSocketConnect(
@@ -160,7 +159,7 @@ class Server {
     }
 
     try {
-      await JwtUtil.verifyToken(token);
+      JwtUtil.verifyToken(token);
     } on JWTExpiredException {
       await webSocketServer!.disconnectClient(clientId, 'token is expired');
     } on JWTException {
