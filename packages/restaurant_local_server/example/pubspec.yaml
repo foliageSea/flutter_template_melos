@@ -6,9 +6,13 @@ environment:
   sdk: ^3.7.2
 
 dependencies:
+  restaurant_local_server: any
+  http: ^1.1.0
+
+
+dependency_overrides:
   restaurant_local_server:
     path: ../
-  http: ^1.1.0
 
 dev_dependencies:
   test: ^1.24.0
