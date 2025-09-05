@@ -7,8 +7,8 @@ homepage: https://github.com/naseefcr/restaurant_local_server
 documentation: https://github.com/naseefcr/restaurant_local_server#readme
 
 environment:
-  sdk: ^3.7.2
-  flutter: ">=3.10.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.1 <4.0.0"
 
 dependencies:
   flutter:

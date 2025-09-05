@@ -28,7 +28,7 @@ melos:
         flutter: ">=3.35.1 <4.0.0"
       hooks:
         # 初始化时生成代码
-        post: cd apps/web && pnpm i && cd ../.. && melos run generate
+        post: cd apps/web && pnpm i && pnpm build && cd ../.. && melos run generate
 
     clean:
       hooks:
